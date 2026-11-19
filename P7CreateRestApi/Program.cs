@@ -1,4 +1,5 @@
 using Dot.Net.WebApi.Data;
+using Dot.Net.WebApi.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<LocalDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));    // Quand une classe demande un IRepository<X>, on lui fournit un Repository<X>
+builder.Services.AddScoped<UserRepository>(); // Quand une classe demande un UserRepository, on lui fournit un UserRepository
 
 var app = builder.Build();
 
